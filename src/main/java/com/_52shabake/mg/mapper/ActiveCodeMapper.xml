@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com._52shabake.mg.mapper.ActiveCodeMapper">
+	<resultMap id="BaseResultMap" type="com._52shabake.mg.domain.ActiveCode">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="version" property="version" jdbcType="TINYINT" />
+		<result column="activeCode" property="activeCode" jdbcType="VARCHAR" />
+		<result column="phoneNumber" property="phoneNumber" jdbcType="VARCHAR" />
+		<result column="chartState" property="chartState" jdbcType="TINYINT" />
+		<association property="codeType" javaType="com._52shabake.mg.domain.CodeType"
+			columnPrefix="ct_">
+			<id column="id" property="id" />
+			<result column="typeName" property="typeName" />
+		</association>
+
+	</resultMap>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into `activecode` (id,version,activeCode,chartState,codeType,phoneNumber)
+		values (
+		#{id,jdbcType=BIGINT},0,
+		#{activeCode,jdbcType=VARCHAR},
+		#{chartState,jdbcType=TINYINT},
+		#{phoneNumber,jdbcType=VARCHAR},
+		#{codeType.id,jdbcType=BIGINT}
+		)
+	</insert>
+	<update id="updateByPrimaryKey">
+		update `activecode`
+		set 
+		version=version+1,
+		activeCode =
+		#{activeCode,jdbcType=VARCHAR},
+		chartState 
+		= #{chartState,jdbcType=TINYINT},
+		phoneNumber
+		= #{phoneNumber,jdbcType=VARCHAR},
+		codeType_id = 
+		#{codeType.id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and version =#{version}
+	</update>
+
+	<select id="selectRandByCodeType" resultMap="BaseResultMap">
+		(select ac.codeType_id,ac.id,ac.activeCode,ac.chartState,ac.phoneNumber,ac.version,
+		ct.id as ct_id,ct.typeName as ct_typeName
+		from activecode ac JOIN codetype ct ON ac.codeType_id=ct.id 
+		where codeType_id=1 and chartState=0 ORDER BY id limit 1)
+		union ALL
+		(select ac.codeType_id,ac.id,ac.activeCode,ac.chartState,ac.phoneNumber,ac.version,
+		ct.id as ct_id,ct.typeName as ct_typeName
+		from activecode ac JOIN codetype ct ON ac.codeType_id=ct.id 
+		where codeType_id=2 and chartState=0 ORDER BY id limit 1)
+		union ALL
+		(select ac.codeType_id,ac.id,ac.activeCode,ac.chartState,ac.phoneNumber,ac.version,
+		ct.id as ct_id,ct.typeName as ct_typeName
+		from activecode ac JOIN codetype ct ON ac.codeType_id=ct.id 
+		where codeType_id=3 and chartState=0 ORDER BY id limit 1)
+	</select>
+	
+	<select id="selectByPhoneNum" resultMap="BaseResultMap">
+		select
+		ac.codeType_id,ac.id,ac.activeCode,ac.chartState,ac.phoneNumber,ac.version,
+		ct.id as ct_id,ct.typeName as ct_typeName
+		from activecode ac JOIN codetype ct ON ac.codeType_id=ct.id 
+		where  ac.chartState=1 and ac.phoneNumber=#{phoneNumber,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectNumByCodeType" resultType="int">
+		select count(*)
+		from activecode ac JOIN codetype ct ON ac.codeType_id=ct.id where  ac.chartState=0 and ac.codeType_id=#{codeTypeId,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectNumByCodeTypeAll" resultType="int">
+		select count(*)
+		from activecode ac JOIN codetype ct ON ac.codeType_id=ct.id where  ac.codeType_id=#{codeTypeId,jdbcType=BIGINT}
+	</select>
+	
+
+
+</mapper>

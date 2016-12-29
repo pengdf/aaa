@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com._52shabake.mg.mapper.GiftPageMapper">
+	<resultMap id="BaseResultMap" type="com._52shabake.mg.domain.GiftPage">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="version" property="version" jdbcType="TINYINT" />
+		<result column="giftName" property="giftName" jdbcType="VARCHAR" />
+		<result column="giftDetails" property="giftDetails" jdbcType="VARCHAR" />
+		<result column="giftTotal" property="giftTotal" jdbcType="DECIMAL" />
+		<result column="giftNum" property="giftNum" jdbcType="DECIMAL" />
+		<association property="giftType" javaType="com._52shabake.mg.domain.GiftType"
+			columnPrefix="gt_">
+			<id column="id" property="id" />
+			<result column="typeName" property="typeName" />
+		</association>
+		
+		<association property="gameType" javaType="com._52shabake.mg.domain.Game"
+			columnPrefix="ga_">
+			<id column="id" property="id" />
+			<result column="gameName" property="gameName" />
+		</association>
+		
+		<association property="codeType" javaType="com._52shabake.mg.domain.CodeType"
+			columnPrefix="ct_">
+			<id column="id" property="id" />
+			<result column="typeName" property="typeName" />
+		</association>
+	</resultMap>
+
+	<update id="updateByPrimaryKey">
+		update `giftpage`
+		set 
+		version = version+1,
+		giftName =
+		#{giftName,jdbcType=VARCHAR},
+		giftDetails =
+		#{giftDetails,jdbcType=VARCHAR},
+		giftTotal =
+		#{giftTotal,jdbcType=DECIMAL},
+		giftNum =
+		#{giftNum,jdbcType=DECIMAL},
+		giftType_id=
+		#{giftType.id,jdbcType=BIGINT},
+		codeType_id=
+		#{codeType.id,jdbcType=BIGINT},
+		game_id=
+		#{gameType.id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and version=#{version}
+	</update>
+	
+	
+	<select id="selectByGameId" resultMap="BaseResultMap">
+		select gp.id,gp.version,gp.giftName,gp.giftTotal,gp.giftDetails,gp.giftNum,
+		gt.id as gt_id,gt.typeName as gt_typeName,
+		ga.id as ga_id,ga.gameName as ga_gameName,
+		ct.id as ct_id,ct.typeName as ct_typeName
+		from giftpage gp JOIN gifttype gt ON gp.giftType_id = gt.id left join game ga ON gp.game_id =ga.id
+		left join codetype ct on gp.codeType_id=ct.id
+		where ga.id=#{id,jdbcType=BIGINT}
+	</select>
+	
+</mapper>

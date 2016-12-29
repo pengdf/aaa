@@ -1,0 +1,19 @@
+[
+  {"id":1,"giftName":"新手礼包","giftTotal":1000,"giftDetails":"白银",
+    "giftType":{"id":1,"typeName":"至尊礼包"},
+    "gameType":{"id":1,"gameName":"刺客传说"},
+    "giftNum":1000,
+    "codeType":{"id":1,"typeName":"新手激活码"}},
+
+  {"id":2,"giftName":"10级礼包","giftTotal":1000,"giftDetails":"黄金",
+    "giftType":{"id":1,"typeName":"至尊礼包"},
+    "gameType":{"id":1,"gameName":"刺客传说"},
+    "giftNum":500,
+    "codeType":{"id":2,"typeName":"10级激活码"}},
+
+  {"id":3,"giftName":"vip礼包","giftTotal":100,"giftDetails":"钻石",
+    "giftType":{"id":2,"typeName":"VIP礼包"},
+    "gameType":{"id":1,"gameName":"刺客传说"},
+    "giftNum":50,
+    "codeType":{"id":3,"typeName":"vip激活码"}}
+]

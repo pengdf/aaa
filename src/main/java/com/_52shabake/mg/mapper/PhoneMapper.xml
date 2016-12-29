@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com._52shabake.mg.mapper.PhoneMapper">
+	<resultMap id="BaseResultMap" type="com._52shabake.mg.domain.Phone">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="version" property="version" jdbcType="TINYINT" />
+		<result column="phoneNumber" property="phoneNumber" jdbcType="VARCHAR" />
+		<result column="verifyCode" property="verifyCode" jdbcType="VARCHAR" />
+		<result column="cookieNumber" property="cookieNumber" jdbcType="VARCHAR" />
+		<result column="activeState" property="activeState" jdbcType="TINYINT" />
+		<result column="sendTime" property="sendTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into `phone` (id,version,phoneNumber,verifyCode,cookieNumber,
+		activeState, sendTime)
+		values (#{id},0,#{phoneNumber,jdbcType=VARCHAR},#{verifyCode,jdbcType=VARCHAR},
+		#{cookieNumber,jdbcType=VARCHAR},
+		#{activeState,jdbcType=TINYINT},
+		#{sendTime,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="updateByPhoneNum">
+		update `phone`
+		set 
+		version = version +1,
+		phoneNumber =
+		#{phoneNumber,jdbcType=VARCHAR},
+		verifyCode =
+		#{verifyCode,jdbcType=VARCHAR},
+		cookieNumber =
+		#{cookieNumber,jdbcType=VARCHAR},
+		activeState =
+		#{activeState,jdbcType=TINYINT},
+		sendTime =
+		#{sendTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT} and version=#{version}
+	</update>
+	
+	<select id="selectByPhoneNum" resultMap="BaseResultMap">
+		select id,version,phoneNumber,verifyCode,cookieNumber,activeState,sendTime
+		from phone
+		where phoneNumber= #{phoneNumber,jdbcType=VARCHAR}
+	</select>
+
+	
+
+</mapper>
